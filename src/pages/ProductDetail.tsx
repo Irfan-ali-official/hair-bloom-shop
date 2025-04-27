@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { Product } from "@/components/ProductCard";
+import { useCart } from "@/contexts/CartContext";
 
 const products: Product[] = [
   {
@@ -67,6 +68,7 @@ const products: Product[] = [
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [quantity, setQuantity] = useState(1);
+  const { addItem } = useCart();
   
   const product = products.find(p => p.slug === slug);
   
@@ -89,6 +91,10 @@ const ProductDetail = () => {
       </div>
     );
   }
+
+  const handleAddToCart = () => {
+    addItem(product, quantity);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -151,7 +157,10 @@ const ProductDetail = () => {
                 </div>
                 
                 <div className="mt-8">
-                  <Button className="w-full bg-warm-brown hover:bg-warm-brown/90 text-white text-lg py-6">
+                  <Button 
+                    className="w-full bg-warm-brown hover:bg-warm-brown/90 text-white text-lg py-6"
+                    onClick={handleAddToCart}
+                  >
                     <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
                   </Button>
                 </div>
