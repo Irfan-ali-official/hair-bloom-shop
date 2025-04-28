@@ -8,7 +8,6 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import ShippingForm from "@/components/checkout/ShippingForm";
-import PaymentForm from "@/components/checkout/PaymentForm";
 import PaymentMethodSelector from "@/components/checkout/PaymentMethodSelector";
 import OrderSummary from "@/components/checkout/OrderSummary";
 
@@ -21,9 +20,12 @@ type CheckoutFormData = {
   city: string;
   postalCode: string;
   country: string;
-  cardNumber: string;
-  cardExpiry: string;
-  cardCvc: string;
+  bankAccountNumber?: string;
+  bankAccountName?: string;
+  easyPaisaNumber?: string;
+  easyPaisaName?: string;
+  jazzCashNumber?: string;
+  jazzCashName?: string;
 };
 
 const Checkout = () => {
@@ -34,9 +36,6 @@ const Checkout = () => {
     city: '',
     postalCode: '',
     country: '',
-    cardNumber: '',
-    cardExpiry: '',
-    cardCvc: '',
   });
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('bank');
   const [loading, setLoading] = useState(false);
@@ -77,9 +76,6 @@ const Checkout = () => {
             city: data.city || '',
             postalCode: data.postal_code || '',
             country: data.country || '',
-            cardNumber: '',
-            cardExpiry: '',
-            cardCvc: '',
           }));
         }
       } catch (error: any) {
@@ -121,24 +117,24 @@ const Checkout = () => {
     }
     
     const requiredFields: (keyof CheckoutFormData)[] = [
-      'firstName', 'lastName', 'address', 'city', 'postalCode', 
-      'country', 'cardNumber', 'cardExpiry', 'cardCvc'
+      'firstName', 'lastName', 'address', 'city', 'postalCode', 'country'
     ];
+
+    // Add payment method specific required fields
+    if (paymentMethod === 'bank') {
+      requiredFields.push('bankAccountNumber', 'bankAccountName');
+    } else if (paymentMethod === 'easypaisa') {
+      requiredFields.push('easyPaisaNumber', 'easyPaisaName');
+    } else if (paymentMethod === 'jazzcash') {
+      requiredFields.push('jazzCashNumber', 'jazzCashName');
+    }
+    
     const missingFields = requiredFields.filter(field => !formData[field]);
     
     if (missingFields.length > 0) {
       toast({
         title: "Missing information",
         description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (formData.cardNumber.replace(/\s/g, '').length !== 16) {
-      toast({
-        title: "Invalid card number",
-        description: "Please enter a valid 16-digit card number",
         variant: "destructive",
       });
       return;
@@ -163,6 +159,20 @@ const Checkout = () => {
           user_id: user.id,
           total_amount: totalPrice,
           payment_method: paymentMethod,
+          payment_details: {
+            ...(paymentMethod === 'bank' && {
+              accountNumber: formData.bankAccountNumber,
+              accountName: formData.bankAccountName,
+            }),
+            ...(paymentMethod === 'easypaisa' && {
+              phoneNumber: formData.easyPaisaNumber,
+              accountName: formData.easyPaisaName,
+            }),
+            ...(paymentMethod === 'jazzcash' && {
+              phoneNumber: formData.jazzCashNumber,
+              accountName: formData.jazzCashName,
+            }),
+          },
           shipping_address: {
             firstName: formData.firstName,
             lastName: formData.lastName,
@@ -251,15 +261,12 @@ const Checkout = () => {
                   formData={formData} 
                   handleInputChange={handleInputChange} 
                 />
-                
-                <PaymentForm 
-                  formData={formData} 
-                  handleInputChange={handleInputChange} 
-                />
 
                 <PaymentMethodSelector 
                   paymentMethod={paymentMethod}
                   setPaymentMethod={(value) => setPaymentMethod(value as PaymentMethod)}
+                  formData={formData}
+                  handleInputChange={handleInputChange}
                 />
                 
                 <Button 

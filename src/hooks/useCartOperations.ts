@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,20 +27,15 @@ export const useCartOperations = (userId: string | undefined) => {
       
       if (data) {
         const productsWithData = data.map((item) => {
-          const productId = item.product_id;
-          const productParts = productId.split('-');
-          const productName = productParts[0] === 'hairbloom' ? 'HairBloom' : '';
-          const productType = productParts[1] === 'growth' ? 'Growth Oil' : 'Shine Oil';
-          const productSize = productParts[productParts.length - 1];
-          
           const product: Product = {
             id: item.product_id,
-            name: `${productName} ${productType}`,
-            size: productSize,
-            price: productSize === '150ml' ? 19.99 : 
-                   productSize === '250ml' ? 29.99 : 49.99,
-            description: `Our ${productSize} size, perfect for regular use.`,
-            imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
+            name: 'LushMo Hair Oil',
+            size: item.product_id.includes('20ml') ? '20ml' : '100ml',
+            price: item.product_id.includes('20ml') ? 499 : 1999,
+            description: item.product_id.includes('20ml') 
+              ? 'Travel-size bottle perfect for first-time users. Our signature blend of natural herbs.'
+              : 'Our full-size bottle for regular use. Experience the full power of our natural herbal blend.',
+            imageUrl: '/lovable-uploads/1408ccff-d081-44dc-a96d-456428ad3d0b.png',
             slug: item.product_id
           };
           
