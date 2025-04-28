@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -8,72 +7,33 @@ import { Button } from "@/components/ui/button";
 const products: Product[] = [
   {
     id: '1',
-    name: 'HairBloom Growth Oil',
-    size: '150ml',
-    price: 19.99,
-    description: 'Our smallest size, perfect for travel or first-time users. Enriched with biotin and castor oil to promote hair growth.',
-    imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
-    slug: 'hairbloom-growth-oil-150ml'
+    name: 'LushMo Hair Oil',
+    size: '20ml',
+    price: 499,
+    description: 'Travel-size bottle perfect for first-time users. Our signature blend of Amla, Reetha, Shikakai, Ratanjot, and Kalonji herbs.',
+    imageUrl: '/lovable-uploads/1408ccff-d081-44dc-a96d-456428ad3d0b.png',
+    slug: 'lushmo-hair-oil-20ml'
   },
   {
     id: '2',
-    name: 'HairBloom Growth Oil',
-    size: '250ml',
-    price: 29.99,
-    description: 'Our most popular size, ideal for regular use. Enriched with biotin and castor oil to promote hair growth.',
-    imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
-    slug: 'hairbloom-growth-oil-250ml'
-  },
-  {
-    id: '3',
-    name: 'HairBloom Growth Oil',
-    size: '500ml',
-    price: 49.99,
-    description: 'Our largest size, great value for dedicated users. Enriched with biotin and castor oil to promote hair growth.',
-    imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
-    slug: 'hairbloom-growth-oil-500ml'
-  },
-  {
-    id: '4',
-    name: 'HairBloom Shine Oil',
-    size: '150ml',
-    price: 21.99,
-    description: 'Our shine-focused formula in travel size. Infused with argan oil and vitamin E for incredible shine.',
-    imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
-    slug: 'hairbloom-shine-oil-150ml'
-  },
-  {
-    id: '5',
-    name: 'HairBloom Shine Oil',
-    size: '250ml',
-    price: 32.99,
-    description: 'Our medium-sized shine-focused formula. Infused with argan oil and vitamin E for incredible shine.',
-    imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
-    slug: 'hairbloom-shine-oil-250ml'
-  },
-  {
-    id: '6',
-    name: 'HairBloom Shine Oil',
-    size: '500ml',
-    price: 54.99,
-    description: 'Our largest shine-focused formula. Infused with argan oil and vitamin E for incredible shine.',
-    imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
-    slug: 'hairbloom-shine-oil-500ml'
+    name: 'LushMo Hair Oil',
+    size: '100ml',
+    price: 1999,
+    description: 'Our full-size bottle for regular use. Experience the full power of our natural herbal blend for stronger, shinier hair.',
+    imageUrl: '/lovable-uploads/1408ccff-d081-44dc-a96d-456428ad3d0b.png',
+    slug: 'lushmo-hair-oil-100ml'
   }
 ];
 
-type FilterType = 'all' | '150ml' | '250ml' | '500ml' | 'growth' | 'shine';
+type FilterType = 'all' | '20ml' | '100ml';
 
 const Products = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   
   const filteredProducts = products.filter(product => {
     if (activeFilter === 'all') return true;
-    if (activeFilter === '150ml' && product.size === '150ml') return true;
-    if (activeFilter === '250ml' && product.size === '250ml') return true;
-    if (activeFilter === '500ml' && product.size === '500ml') return true;
-    if (activeFilter === 'growth' && product.name.toLowerCase().includes('growth')) return true;
-    if (activeFilter === 'shine' && product.name.toLowerCase().includes('shine')) return true;
+    if (activeFilter === '20ml' && product.size === '20ml') return true;
+    if (activeFilter === '100ml' && product.size === '100ml') return true;
     return false;
   });
 
@@ -81,60 +41,34 @@ const Products = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow">
-        <div className="bg-beige py-12">
+        <div className="bg-lushmo-beige py-12">
           <div className="container mx-auto px-4">
-            <h1 className="text-3xl md:text-4xl font-bold text-warm-brown mb-2">Our Products</h1>
-            <p className="text-muted-foreground">Find the perfect HairBloom oil for your hair care needs</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-lushmo-green mb-2">Our Products</h1>
+            <p className="text-lushmo-brown/80">
+              Choose your perfect size of LushMo Hair Oil for natural nourishment and beautiful shine
+            </p>
           </div>
         </div>
         
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-wrap gap-2 mb-8">
-            <Button 
-              variant={activeFilter === 'all' ? 'default' : 'outline'}
-              className={activeFilter === 'all' ? 'bg-warm-brown hover:bg-warm-brown/90' : 'border-warm-brown text-warm-brown hover:bg-warm-brown/10'}
-              onClick={() => setActiveFilter('all')}
-            >
-              All Products
-            </Button>
-            <Button 
-              variant={activeFilter === 'growth' ? 'default' : 'outline'}
-              className={activeFilter === 'growth' ? 'bg-warm-brown hover:bg-warm-brown/90' : 'border-warm-brown text-warm-brown hover:bg-warm-brown/10'}
-              onClick={() => setActiveFilter('growth')}
-            >
-              Growth Formula
-            </Button>
-            <Button 
-              variant={activeFilter === 'shine' ? 'default' : 'outline'}
-              className={activeFilter === 'shine' ? 'bg-warm-brown hover:bg-warm-brown/90' : 'border-warm-brown text-warm-brown hover:bg-warm-brown/10'}
-              onClick={() => setActiveFilter('shine')}
-            >
-              Shine Formula
-            </Button>
-            <Button 
-              variant={activeFilter === '150ml' ? 'default' : 'outline'}
-              className={activeFilter === '150ml' ? 'bg-warm-brown hover:bg-warm-brown/90' : 'border-warm-brown text-warm-brown hover:bg-warm-brown/10'}
-              onClick={() => setActiveFilter('150ml')}
-            >
-              150ml
-            </Button>
-            <Button 
-              variant={activeFilter === '250ml' ? 'default' : 'outline'}
-              className={activeFilter === '250ml' ? 'bg-warm-brown hover:bg-warm-brown/90' : 'border-warm-brown text-warm-brown hover:bg-warm-brown/10'}
-              onClick={() => setActiveFilter('250ml')}
-            >
-              250ml
-            </Button>
-            <Button 
-              variant={activeFilter === '500ml' ? 'default' : 'outline'}
-              className={activeFilter === '500ml' ? 'bg-warm-brown hover:bg-warm-brown/90' : 'border-warm-brown text-warm-brown hover:bg-warm-brown/10'}
-              onClick={() => setActiveFilter('500ml')}
-            >
-              500ml
-            </Button>
+            {['all', '20ml', '100ml'].map((filter) => (
+              <Button 
+                key={filter}
+                variant={activeFilter === filter ? 'default' : 'outline'}
+                className={
+                  activeFilter === filter 
+                    ? 'bg-lushmo-green hover:bg-lushmo-green/90' 
+                    : 'border-lushmo-green text-lushmo-green hover:bg-lushmo-green/10'
+                }
+                onClick={() => setActiveFilter(filter as FilterType)}
+              >
+                {filter === 'all' ? 'All Sizes' : filter}
+              </Button>
+            ))}
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {filteredProducts.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -146,6 +80,8 @@ const Products = () => {
             </div>
           )}
         </div>
+        
+        <PaymentMethods />
       </main>
       <Footer />
     </div>
