@@ -1,17 +1,16 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Building2, CreditCard, Wallet } from "lucide-react";
+import ShippingForm from "@/components/checkout/ShippingForm";
+import PaymentForm from "@/components/checkout/PaymentForm";
+import PaymentMethodSelector from "@/components/checkout/PaymentMethodSelector";
+import OrderSummary from "@/components/checkout/OrderSummary";
 
 type PaymentMethod = 'bank' | 'easypaisa' | 'jazzcash';
 
@@ -47,7 +46,6 @@ const Checkout = () => {
   const { toast } = useToast();
   const [processingOrder, setProcessingOrder] = useState(false);
 
-  // Redirect if not logged in or cart is empty
   useEffect(() => {
     if (!isAuthLoading && !user) {
       navigate("/auth");
@@ -56,7 +54,6 @@ const Checkout = () => {
     }
   }, [user, items, isAuthLoading, isCartLoading, navigate]);
 
-  // Load user profile data
   useEffect(() => {
     const loadUserProfile = async () => {
       if (!user) return;
@@ -123,7 +120,6 @@ const Checkout = () => {
       return;
     }
     
-    // Check if all required fields are filled
     const requiredFields: (keyof CheckoutFormData)[] = [
       'firstName', 'lastName', 'address', 'city', 'postalCode', 
       'country', 'cardNumber', 'cardExpiry', 'cardCvc'
@@ -139,7 +135,6 @@ const Checkout = () => {
       return;
     }
     
-    // Simple validation for card fields
     if (formData.cardNumber.replace(/\s/g, '').length !== 16) {
       toast({
         title: "Invalid card number",
@@ -152,7 +147,6 @@ const Checkout = () => {
     setProcessingOrder(true);
     
     try {
-      // First update user profile
       await supabase.from('profiles').upsert({
         id: user.id,
         first_name: formData.firstName,
@@ -163,7 +157,6 @@ const Checkout = () => {
         country: formData.country,
       });
       
-      // Create order in database
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
@@ -185,7 +178,6 @@ const Checkout = () => {
         
       if (orderError) throw orderError;
       
-      // Add order items
       const orderItems = items.map(item => ({
         order_id: orderData.id,
         product_id: item.product.id,
@@ -199,10 +191,8 @@ const Checkout = () => {
         
       if (itemsError) throw itemsError;
       
-      // Clear cart after successful order
       await clearCart();
       
-      // Show success message with payment instructions
       let paymentInstructions = "";
       switch(paymentMethod) {
         case 'bank':
@@ -257,161 +247,20 @@ const Checkout = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="bg-white p-6 rounded-lg border border-border">
-                  <h2 className="text-xl font-semibold mb-4 text-lushmo-green">Shipping Information</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input 
-                        id="firstName"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input 
-                        id="lastName"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2 mt-4">
-                    <Label htmlFor="address">Street Address</Label>
-                    <Input 
-                      id="address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="city">City</Label>
-                      <Input 
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="postalCode">Postal Code</Label>
-                      <Input 
-                        id="postalCode"
-                        name="postalCode"
-                        value={formData.postalCode}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="country">Country</Label>
-                      <Input 
-                        id="country"
-                        name="country"
-                        value={formData.country}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
+                <ShippingForm 
+                  formData={formData} 
+                  handleInputChange={handleInputChange} 
+                />
                 
-                <div className="bg-white p-6 rounded-lg border border-border">
-                  <h2 className="text-xl font-semibold mb-4 text-lushmo-green">Payment Information</h2>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="cardNumber">Card Number</Label>
-                      <Input 
-                        id="cardNumber"
-                        name="cardNumber"
-                        placeholder="1234 5678 9012 3456"
-                        value={formData.cardNumber}
-                        onChange={handleInputChange}
-                        required
-                        maxLength={19}
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="cardExpiry">Expiry Date</Label>
-                        <Input 
-                          id="cardExpiry"
-                          name="cardExpiry"
-                          placeholder="MM/YY"
-                          value={formData.cardExpiry}
-                          onChange={handleInputChange}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="cardCvc">CVC</Label>
-                        <Input 
-                          id="cardCvc"
-                          name="cardCvc"
-                          placeholder="123"
-                          value={formData.cardCvc}
-                          onChange={handleInputChange}
-                          required
-                          maxLength={3}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <PaymentForm 
+                  formData={formData} 
+                  handleInputChange={handleInputChange} 
+                />
 
-                <div className="bg-white p-6 rounded-lg border border-border">
-                  <h2 className="text-xl font-semibold mb-4 text-lushmo-green">Payment Method</h2>
-                  <RadioGroup
-                    value={paymentMethod}
-                    onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
-                    className="grid gap-4"
-                  >
-                    <div className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:bg-lushmo-beige/10">
-                      <RadioGroupItem value="bank" id="bank" />
-                      <Label htmlFor="bank" className="flex items-center gap-2 cursor-pointer">
-                        <Building2 className="h-5 w-5 text-lushmo-gold" />
-                        <div>
-                          <div className="font-medium">Bank Transfer</div>
-                          <div className="text-sm text-muted-foreground">Pay directly to our bank account</div>
-                        </div>
-                      </Label>
-                    </div>
-                    
-                    <div className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:bg-lushmo-beige/10">
-                      <RadioGroupItem value="easypaisa" id="easypaisa" />
-                      <Label htmlFor="easypaisa" className="flex items-center gap-2 cursor-pointer">
-                        <CreditCard className="h-5 w-5 text-lushmo-gold" />
-                        <div>
-                          <div className="font-medium">EasyPaisa</div>
-                          <div className="text-sm text-muted-foreground">Pay using EasyPaisa mobile wallet</div>
-                        </div>
-                      </Label>
-                    </div>
-                    
-                    <div className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:bg-lushmo-beige/10">
-                      <RadioGroupItem value="jazzcash" id="jazzcash" />
-                      <Label htmlFor="jazzcash" className="flex items-center gap-2 cursor-pointer">
-                        <Wallet className="h-5 w-5 text-lushmo-gold" />
-                        <div>
-                          <div className="font-medium">JazzCash</div>
-                          <div className="text-sm text-muted-foreground">Pay using JazzCash mobile wallet</div>
-                        </div>
-                      </Label>
-                    </div>
-                  </RadioGroup>
-                </div>
+                <PaymentMethodSelector 
+                  paymentMethod={paymentMethod}
+                  setPaymentMethod={(value) => setPaymentMethod(value as PaymentMethod)}
+                />
                 
                 <Button 
                   type="submit" 
@@ -424,39 +273,7 @@ const Checkout = () => {
             </div>
             
             <div className="lg:col-span-1">
-              <div className="bg-white p-6 rounded-lg border border-border sticky top-4">
-                <h2 className="text-xl font-semibold mb-4 text-lushmo-green">Order Summary</h2>
-                <div className="divide-y divide-border">
-                  {items.map(item => (
-                    <div key={item.product.id} className="py-3 flex justify-between">
-                      <div>
-                        <div className="font-medium">{item.product.name}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {item.product.size} x {item.quantity}
-                        </div>
-                      </div>
-                      <div className="font-medium">
-                        Rs. {(item.product.price * item.quantity).toFixed(2)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="border-t border-border mt-4 pt-4">
-                  <div className="flex justify-between mb-2">
-                    <span>Subtotal</span>
-                    <span>Rs. {totalPrice.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Shipping</span>
-                    <span>Free</span>
-                  </div>
-                  <div className="flex justify-between font-bold text-lg mt-4 pt-2 border-t border-border">
-                    <span>Total</span>
-                    <span>Rs. {totalPrice.toFixed(2)}</span>
-                  </div>
-                </div>
-              </div>
+              <OrderSummary items={items} totalPrice={totalPrice} />
             </div>
           </div>
         </div>
