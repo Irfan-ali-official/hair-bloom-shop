@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from "@/components/Header";
@@ -27,7 +28,7 @@ type CheckoutFormData = {
 };
 
 const Checkout = () => {
-  const [formData, setFormData<CheckoutFormData>>({
+  const [formData, setFormData] = useState<CheckoutFormData>({
     firstName: '',
     lastName: '',
     address: '',
@@ -138,7 +139,7 @@ const Checkout = () => {
       return;
     }
     
-        // Simple validation for card fields
+    // Simple validation for card fields
     if (formData.cardNumber.replace(/\s/g, '').length !== 16) {
       toast({
         title: "Invalid card number",
