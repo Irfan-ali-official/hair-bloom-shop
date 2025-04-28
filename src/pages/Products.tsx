@@ -1,8 +1,10 @@
+
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard, { Product } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
+import PaymentMethods from "@/components/PaymentMethods";
 
 const products: Product[] = [
   {
