@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from "@/components/Header";
@@ -6,10 +5,14 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { Building2, CreditCard, Wallet } from "lucide-react";
+
+type PaymentMethod = 'bank' | 'easypaisa' | 'jazzcash';
 
 type CheckoutFormData = {
   firstName: string;
@@ -24,7 +27,7 @@ type CheckoutFormData = {
 };
 
 const Checkout = () => {
-  const [formData, setFormData] = useState<CheckoutFormData>({
+  const [formData, setFormData<CheckoutFormData>>({
     firstName: '',
     lastName: '',
     address: '',
@@ -35,6 +38,7 @@ const Checkout = () => {
     cardExpiry: '',
     cardCvc: '',
   });
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('bank');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { items, totalPrice, clearCart, isLoading: isCartLoading } = useCart();
@@ -75,6 +79,9 @@ const Checkout = () => {
             city: data.city || '',
             postalCode: data.postal_code || '',
             country: data.country || '',
+            cardNumber: '',
+            cardExpiry: '',
+            cardCvc: '',
           }));
         }
       } catch (error: any) {
@@ -87,13 +94,11 @@ const Checkout = () => {
     loadUserProfile();
   }, [user]);
 
-  // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission (dummy payment process)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -122,8 +127,8 @@ const Checkout = () => {
       'firstName', 'lastName', 'address', 'city', 'postalCode', 
       'country', 'cardNumber', 'cardExpiry', 'cardCvc'
     ];
-    
     const missingFields = requiredFields.filter(field => !formData[field]);
+    
     if (missingFields.length > 0) {
       toast({
         title: "Missing information",
@@ -133,7 +138,7 @@ const Checkout = () => {
       return;
     }
     
-    // Simple validation for card fields
+        // Simple validation for card fields
     if (formData.cardNumber.replace(/\s/g, '').length !== 16) {
       toast({
         title: "Invalid card number",
@@ -163,6 +168,7 @@ const Checkout = () => {
         .insert({
           user_id: user.id,
           total_amount: totalPrice,
+          payment_method: paymentMethod,
           shipping_address: {
             firstName: formData.firstName,
             lastName: formData.lastName,
@@ -171,6 +177,7 @@ const Checkout = () => {
             postalCode: formData.postalCode,
             country: formData.country,
           },
+          status: 'pending'
         })
         .select()
         .single();
@@ -191,16 +198,26 @@ const Checkout = () => {
         
       if (itemsError) throw itemsError;
       
-      // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       // Clear cart after successful order
       await clearCart();
       
-      // Show success message
+      // Show success message with payment instructions
+      let paymentInstructions = "";
+      switch(paymentMethod) {
+        case 'bank':
+          paymentInstructions = "Please transfer the amount to our bank account. Details will be sent to your email.";
+          break;
+        case 'easypaisa':
+          paymentInstructions = "Please complete the payment using EasyPaisa. Account details will be sent to your email.";
+          break;
+        case 'jazzcash':
+          paymentInstructions = "Please complete the payment using JazzCash. Account details will be sent to your email.";
+          break;
+      }
+      
       toast({
         title: "Order placed successfully!",
-        description: "Thank you for your purchase",
+        description: paymentInstructions,
       });
       
       navigate("/");
@@ -219,9 +236,9 @@ const Checkout = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-grow flex items-center justify-center bg-beige">
+        <main className="flex-grow flex items-center justify-center bg-lushmo-beige">
           <div className="text-center">
-            <p className="text-warm-brown">Loading checkout...</p>
+            <p className="text-lushmo-brown">Loading checkout...</p>
           </div>
         </main>
         <Footer />
@@ -232,15 +249,15 @@ const Checkout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-grow bg-beige">
+      <main className="flex-grow bg-lushmo-beige">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-warm-brown mb-8">Checkout</h1>
+          <h1 className="text-3xl font-bold text-lushmo-green mb-8">Checkout</h1>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg border border-border">
-                <div>
-                  <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="bg-white p-6 rounded-lg border border-border">
+                  <h2 className="text-xl font-semibold mb-4 text-lushmo-green">Shipping Information</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="firstName">First Name</Label>
@@ -309,8 +326,8 @@ const Checkout = () => {
                   </div>
                 </div>
                 
-                <div className="border-t border-border pt-6">
-                  <h2 className="text-xl font-semibold mb-4">Payment Information</h2>
+                <div className="bg-white p-6 rounded-lg border border-border">
+                  <h2 className="text-xl font-semibold mb-4 text-lushmo-green">Payment Information</h2>
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="cardNumber">Card Number</Label>
@@ -352,20 +369,62 @@ const Checkout = () => {
                     </div>
                   </div>
                 </div>
+
+                <div className="bg-white p-6 rounded-lg border border-border">
+                  <h2 className="text-xl font-semibold mb-4 text-lushmo-green">Payment Method</h2>
+                  <RadioGroup
+                    value={paymentMethod}
+                    onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
+                    className="grid gap-4"
+                  >
+                    <div className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:bg-lushmo-beige/10">
+                      <RadioGroupItem value="bank" id="bank" />
+                      <Label htmlFor="bank" className="flex items-center gap-2 cursor-pointer">
+                        <Building2 className="h-5 w-5 text-lushmo-gold" />
+                        <div>
+                          <div className="font-medium">Bank Transfer</div>
+                          <div className="text-sm text-muted-foreground">Pay directly to our bank account</div>
+                        </div>
+                      </Label>
+                    </div>
+                    
+                    <div className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:bg-lushmo-beige/10">
+                      <RadioGroupItem value="easypaisa" id="easypaisa" />
+                      <Label htmlFor="easypaisa" className="flex items-center gap-2 cursor-pointer">
+                        <CreditCard className="h-5 w-5 text-lushmo-gold" />
+                        <div>
+                          <div className="font-medium">EasyPaisa</div>
+                          <div className="text-sm text-muted-foreground">Pay using EasyPaisa mobile wallet</div>
+                        </div>
+                      </Label>
+                    </div>
+                    
+                    <div className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:bg-lushmo-beige/10">
+                      <RadioGroupItem value="jazzcash" id="jazzcash" />
+                      <Label htmlFor="jazzcash" className="flex items-center gap-2 cursor-pointer">
+                        <Wallet className="h-5 w-5 text-lushmo-gold" />
+                        <div>
+                          <div className="font-medium">JazzCash</div>
+                          <div className="text-sm text-muted-foreground">Pay using JazzCash mobile wallet</div>
+                        </div>
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                </div>
                 
                 <Button 
                   type="submit" 
-                  className="w-full bg-warm-brown hover:bg-warm-brown/90 mt-8"
+                  className="w-full bg-lushmo-green hover:bg-lushmo-green/90"
                   disabled={processingOrder}
                 >
-                  {processingOrder ? "Processing Order..." : `Pay $${totalPrice.toFixed(2)}`}
+                  {processingOrder ? "Processing Order..." : `Pay Rs. ${totalPrice.toFixed(2)}`}
                 </Button>
               </form>
             </div>
             
             <div className="lg:col-span-1">
-              <div className="bg-white p-6 rounded-lg border border-border">
-                <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+              <div className="bg-white p-6 rounded-lg border border-border sticky top-4">
+                <h2 className="text-xl font-semibold mb-4 text-lushmo-green">Order Summary</h2>
                 <div className="divide-y divide-border">
                   {items.map(item => (
                     <div key={item.product.id} className="py-3 flex justify-between">
@@ -376,7 +435,7 @@ const Checkout = () => {
                         </div>
                       </div>
                       <div className="font-medium">
-                        ${(item.product.price * item.quantity).toFixed(2)}
+                        Rs. {(item.product.price * item.quantity).toFixed(2)}
                       </div>
                     </div>
                   ))}
@@ -385,7 +444,7 @@ const Checkout = () => {
                 <div className="border-t border-border mt-4 pt-4">
                   <div className="flex justify-between mb-2">
                     <span>Subtotal</span>
-                    <span>${totalPrice.toFixed(2)}</span>
+                    <span>Rs. {totalPrice.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
@@ -393,7 +452,7 @@ const Checkout = () => {
                   </div>
                   <div className="flex justify-between font-bold text-lg mt-4 pt-2 border-t border-border">
                     <span>Total</span>
-                    <span>${totalPrice.toFixed(2)}</span>
+                    <span>Rs. {totalPrice.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
