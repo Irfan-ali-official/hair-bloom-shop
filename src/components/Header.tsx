@@ -23,13 +23,17 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <h1 className="text-warm-brown font-semibold text-xl md:text-2xl">HairBloom</h1>
+            <img 
+              src="/lovable-uploads/42c2cc37-9ec6-41fb-8ffb-8934818693f6.png" 
+              alt="LushMo Hair Oil" 
+              className="h-10 mr-2" 
+            />
           </Link>
 
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-foreground hover:text-warm-brown transition-colors">Home</Link>
-            <Link to="/products" className="text-foreground hover:text-warm-brown transition-colors">Products</Link>
+            <Link to="/" className="text-foreground hover:text-lushmo-green transition-colors">Home</Link>
+            <Link to="/products" className="text-foreground hover:text-lushmo-green transition-colors">Products</Link>
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -63,7 +67,7 @@ const Header = () => {
             >
               <ShoppingCart className="h-5 w-5" />
               {totalItems > 0 && (
-                <span className="absolute top-0 right-0 bg-warm-brown text-white w-4 h-4 rounded-full text-xs flex items-center justify-center">
+                <span className="absolute top-0 right-0 bg-lushmo-gold text-white w-4 h-4 rounded-full text-xs flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
@@ -90,7 +94,7 @@ const Header = () => {
             >
               <ShoppingCart className="h-5 w-5" />
               {totalItems > 0 && (
-                <span className="absolute top-0 right-0 bg-warm-brown text-white w-4 h-4 rounded-full text-xs flex items-center justify-center">
+                <span className="absolute top-0 right-0 bg-lushmo-gold text-white w-4 h-4 rounded-full text-xs flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
@@ -108,14 +112,14 @@ const Header = () => {
             <nav className="flex flex-col space-y-3">
               <Link 
                 to="/" 
-                className="text-foreground hover:text-warm-brown transition-colors px-2 py-1"
+                className="text-foreground hover:text-lushmo-green transition-colors px-2 py-1"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
               </Link>
               <Link 
                 to="/products" 
-                className="text-foreground hover:text-warm-brown transition-colors px-2 py-1"
+                className="text-foreground hover:text-lushmo-green transition-colors px-2 py-1"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Products
@@ -125,14 +129,14 @@ const Header = () => {
                 <>
                   <Link 
                     to="/profile" 
-                    className="text-foreground hover:text-warm-brown transition-colors px-2 py-1"
+                    className="text-foreground hover:text-lushmo-green transition-colors px-2 py-1"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     My Profile
                   </Link>
                   <button 
                     onClick={handleSignOut}
-                    className="text-left text-foreground hover:text-warm-brown transition-colors px-2 py-1"
+                    className="text-left text-foreground hover:text-lushmo-green transition-colors px-2 py-1"
                   >
                     Sign Out
                   </button>
@@ -140,7 +144,7 @@ const Header = () => {
               ) : (
                 <Link 
                   to="/auth" 
-                  className="text-foreground hover:text-warm-brown transition-colors px-2 py-1"
+                  className="text-foreground hover:text-lushmo-green transition-colors px-2 py-1"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sign In

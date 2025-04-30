@@ -4,7 +4,7 @@ const testimonials = [
     id: '1',
     name: 'Sarah J.',
     role: 'Verified Customer',
-    quote: 'After using HairBloom Oil for just 3 months, my hair is visibly thicker and healthier. The shine is incredible too!',
+    quote: 'After using LushMo Oil for just 3 months, my hair is visibly thicker and healthier. The shine is incredible too!',
     avatar: 'https://randomuser.me/api/portraits/women/48.jpg'
   },
   {
@@ -18,7 +18,7 @@ const testimonials = [
     id: '3',
     name: 'Amelia L.',
     role: 'Hair Stylist',
-    quote: 'I recommend HairBloom to all my clients with thinning or damaged hair. The results speak for themselves - lustrous, vibrant hair.',
+    quote: 'I recommend LushMo to all my clients with thinning or damaged hair. The results speak for themselves - lustrous, vibrant hair.',
     avatar: 'https://randomuser.me/api/portraits/women/32.jpg'
   }
 ];
@@ -28,7 +28,7 @@ const Testimonials = () => {
     <section className="py-16 bg-beige">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-warm-brown mb-4">What Our Customers Say</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-lushmo-green mb-4">What Our Customers Say</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Real results from real people who have transformed their hair with our premium oils.
           </p>

@@ -8,6 +8,13 @@ const HeroBanner = () => {
       <div className="absolute inset-0 bg-[url('/lovable-uploads/1408ccff-d081-44dc-a96d-456428ad3d0b.png')] bg-cover bg-center opacity-10"></div>
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         <div className="max-w-3xl">
+          <div className="mb-8">
+            <img 
+              src="/lovable-uploads/42c2cc37-9ec6-41fb-8ffb-8934818693f6.png" 
+              alt="LushMo Hair Oil" 
+              className="h-20 md:h-24"
+            />
+          </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-lushmo-green mb-4">
             Nourish Naturally, <br /> Shine Beautifully
           </h1>

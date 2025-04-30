@@ -31,7 +31,7 @@ const Features = () => {
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-warm-brown mb-4">Why Choose HairBloom</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-lushmo-green mb-4">Why Choose LushMo</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Our premium oil is specially formulated to give you the best results for your hair care routine.
           </p>
@@ -41,7 +41,7 @@ const Features = () => {
           {features.map((feature) => (
             <div key={feature.id} className="bg-beige p-6 rounded-lg text-center">
               <div className="text-4xl mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-medium text-warm-brown mb-3">{feature.title}</h3>
+              <h3 className="text-xl font-medium text-lushmo-green mb-3">{feature.title}</h3>
               <p className="text-muted-foreground">{feature.description}</p>
             </div>
           ))}
