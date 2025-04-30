@@ -6,6 +6,7 @@ import Testimonials from "@/components/Testimonials";
 import CallToAction from "@/components/CallToAction";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PaymentMethods from "@/components/PaymentMethods";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
         <FeaturedProducts />
         <Features />
         <Testimonials />
+        <PaymentMethods />
         <CallToAction />
       </main>
       <Footer />
