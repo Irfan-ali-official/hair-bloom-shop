@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const HeroBanner = () => {
   return (
     <section className="relative bg-lushmo-beige overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/lovable-uploads/1408ccff-d081-44dc-a96d-456428ad3d0b.png')] bg-cover bg-center opacity-10"></div>
+      <div className="absolute inset-0 bg-[url('/lovable-uploads/2a86855a-e923-4d05-8923-d398ad5728f0.png')] bg-cover bg-center opacity-10"></div>
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         <div className="max-w-3xl">
           <div className="mb-8">

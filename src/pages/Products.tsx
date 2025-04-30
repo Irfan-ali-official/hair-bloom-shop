@@ -13,7 +13,7 @@ const products: Product[] = [
     size: '20ml',
     price: 499,
     description: 'Travel-size bottle perfect for first-time users. Our signature blend of Amla, Reetha, Shikakai, Ratanjot, and Kalonji herbs.',
-    imageUrl: '/lovable-uploads/1408ccff-d081-44dc-a96d-456428ad3d0b.png',
+    imageUrl: '/lovable-uploads/2a86855a-e923-4d05-8923-d398ad5728f0.png',
     slug: 'lushmo-hair-oil-20ml'
   },
   {
@@ -22,7 +22,7 @@ const products: Product[] = [
     size: '100ml',
     price: 1999,
     description: 'Our full-size bottle for regular use. Experience the full power of our natural herbal blend for stronger, shinier hair.',
-    imageUrl: '/lovable-uploads/1408ccff-d081-44dc-a96d-456428ad3d0b.png',
+    imageUrl: '/lovable-uploads/2a86855a-e923-4d05-8923-d398ad5728f0.png',
     slug: 'lushmo-hair-oil-100ml'
   }
 ];
