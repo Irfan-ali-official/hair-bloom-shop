@@ -1,8 +1,28 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import ProductCard, { Product } from './ProductCard';
+
+const products: Product[] = [
+  {
+    id: '1',
+    name: 'LushMo Hair Oil',
+    size: '20ml',
+    price: 499,
+    description: 'Travel-size bottle perfect for first-time users. Our signature blend of Amla, Reetha, Shikakai, Ratanjot, and Kalonji herbs.',
+    imageUrl: '/lovable-uploads/2a86855a-e923-4d05-8923-d398ad5728f0.png',
+    slug: 'lushmo-hair-oil-20ml'
+  },
+  {
+    id: '2',
+    name: 'LushMo Hair Oil',
+    size: '100ml',
+    price: 1999,
+    description: 'Our full-size bottle for regular use. Experience the full power of our natural herbal blend for stronger, shinier hair.',
+    imageUrl: '/lovable-uploads/2a86855a-e923-4d05-8923-d398ad5728f0.png',
+    slug: 'lushmo-hair-oil-100ml'
+  }
+];
 
 const FeaturedProducts = () => {
   return (
@@ -15,14 +35,14 @@ const FeaturedProducts = () => {
           </p>
         </div>
         
-        <Card className="overflow-hidden bg-white rounded-2xl shadow-xl border-0 mb-12">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
             <div className="bg-gradient-to-br from-lushmo-green/10 to-lushmo-gold/10 p-8 md:p-12 flex items-center justify-center">
               <div className="relative max-w-md mx-auto">
                 <div className="absolute -top-8 -left-8 w-24 h-24 rounded-full bg-lushmo-gold/20 filter blur-lg"></div>
                 <div className="absolute -bottom-12 -right-12 w-32 h-32 rounded-full bg-lushmo-green/20 filter blur-lg"></div>
                 <img 
-                  src="/lovable-uploads/7062c11d-ae54-4ffd-9e61-22d3fa49e151.png" 
+                  src="/lovable-uploads/2a86855a-e923-4d05-8923-d398ad5728f0.png" 
                   alt="LushMo Hair Oil" 
                   className="w-full max-w-xs mx-auto z-10 relative drop-shadow-2xl hover:scale-105 transition-transform duration-500"
                 />
@@ -53,53 +73,22 @@ const FeaturedProducts = () => {
                 </div>
               </div>
               
-              <Button asChild className="self-start bg-lushmo-green hover:bg-lushmo-green/90 text-white rounded-full">
-                <Link to="/products">View Collection <ArrowRight className="ml-1" /></Link>
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild className="bg-lushmo-green hover:bg-lushmo-green/90 text-white rounded-full">
+                  <Link to="/products">Shop Now</Link>
+                </Button>
+                <Button asChild variant="outline" className="border-lushmo-green text-lushmo-green hover:bg-lushmo-green/10 rounded-full">
+                  <Link to="/products">Learn More</Link>
+                </Button>
+              </div>
             </div>
           </div>
-        </Card>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mt-8">
-          <Card className="border border-lushmo-gold/20 hover:border-lushmo-gold hover:shadow-lg transition-all duration-300 overflow-hidden">
-            <CardContent className="p-6">
-              <div className="aspect-square overflow-hidden mb-6 bg-gradient-to-br from-lushmo-green/5 to-lushmo-gold/5 rounded-md flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/7062c11d-ae54-4ffd-9e61-22d3fa49e151.png" 
-                  alt="LushMo Hair Oil 20ml" 
-                  className="h-3/4 object-contain"
-                />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-lushmo-green">LushMo Hair Oil</h3>
-                <p className="text-lushmo-gold font-medium">20ml • Rs. 499</p>
-                <p className="my-3 text-gray-600">Travel-size bottle perfect for first-time users. Our signature blend of natural herbs.</p>
-                <Button asChild className="w-full mt-2 bg-lushmo-green hover:bg-lushmo-green/90 text-white">
-                  <Link to="/products/lushmo-hair-oil-20ml">View Details</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="border border-lushmo-gold/20 hover:border-lushmo-gold hover:shadow-lg transition-all duration-300 overflow-hidden">
-            <CardContent className="p-6">
-              <div className="aspect-square overflow-hidden mb-6 bg-gradient-to-br from-lushmo-green/5 to-lushmo-gold/5 rounded-md flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/7062c11d-ae54-4ffd-9e61-22d3fa49e151.png" 
-                  alt="LushMo Hair Oil 100ml" 
-                  className="h-3/4 object-contain"
-                />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-lushmo-green">LushMo Hair Oil</h3>
-                <p className="text-lushmo-gold font-medium">100ml • Rs. 1999</p>
-                <p className="my-3 text-gray-600">Our full-size bottle for regular use. Experience the full power of our natural herbal blend.</p>
-                <Button asChild className="w-full mt-2 bg-lushmo-green hover:bg-lushmo-green/90 text-white">
-                  <Link to="/products/lushmo-hair-oil-100ml">View Details</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </div>
       </div>
     </section>

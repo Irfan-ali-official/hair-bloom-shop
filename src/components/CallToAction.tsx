@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
-import { ArrowRight } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 
 const CallToAction = () => {
   return (
@@ -10,7 +10,7 @@ const CallToAction = () => {
         <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-xl p-8 md:p-12 border border-white/20 shadow-xl">
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Transform Your Hair Naturally
+              Ready to Transform Your Hair?
             </h2>
             <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">
               Experience the power of 8 natural ingredients in our herbal blend, designed to strengthen roots, reduce hair fall, and boost shine.
@@ -20,11 +20,12 @@ const CallToAction = () => {
               className="bg-white text-lushmo-green hover:bg-white/90 rounded-full px-8 py-6 text-lg"
             >
               <Link to="/products">
-                View Collection <ArrowRight className="ml-1" />
+                <ShoppingCart className="mr-2" />
+                ORDER NOW
               </Link>
             </Button>
             <p className="mt-4 text-white/80 font-medium">
-              Premium hair care in 20ml and 100ml sizes
+              Available in 100 ml and 20 ml
             </p>
           </div>
         </div>
